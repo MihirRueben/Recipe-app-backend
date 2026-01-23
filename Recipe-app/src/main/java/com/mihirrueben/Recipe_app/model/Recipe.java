@@ -17,7 +17,7 @@ public class Recipe {
     private List<String> ingredients;
     private String instructions;
 
-    // For Bonus Features [cite: 16, 17]
+    // For Bonus Features
     private String category; // e.g., Vegan, Dessert
     private String imageUrl; // Path to the uploaded photo
 

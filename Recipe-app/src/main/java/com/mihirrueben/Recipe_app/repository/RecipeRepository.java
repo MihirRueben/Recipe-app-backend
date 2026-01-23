@@ -9,7 +9,7 @@ import java.util.List;
 public interface RecipeRepository extends MongoRepository<Recipe, String> {
 
     //Finding all recipes created by a specific user
-    List<Recipe> findbyUserID(String userId);
+    List<Recipe> findByUserId(String userId);
 
     //Search recipes by title (case-insensitive)
     List<Recipe> findByTitleContainingIgnoreCase(String title);
