@@ -5,6 +5,10 @@ import com.mihirrueben.Recipe_app.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,15 +32,39 @@ public class RecipeService {
       return  recipeRepository.findById(id);
     }
 
-    //Delete
-    public void deleteRecipe(String id) {
-        recipeRepository.deleteById(id);
-    }
-
     // Search Feature
     public List<Recipe> searchByTitle(String title) {
         return recipeRepository.findByTitleContainingIgnoreCase(title);
     }
 
+    public Recipe updateRecipe(String id, Recipe updatedRecipe) {
+        return recipeRepository.findById(id).map(recipe -> {
+            recipe.setTitle(updatedRecipe.getTitle());
+            recipe.setDescription(updatedRecipe.getDescription());
+            recipe.setIngredients(updatedRecipe.getIngredients());
+            recipe.setInstructions(updatedRecipe.getInstructions());
+            recipe.setCategory(updatedRecipe.getCategory());
+            recipe.setImageUrl(updatedRecipe.getImageUrl());
 
+            return recipeRepository.save(recipe);
+        }).orElseThrow(() -> new RuntimeException("Recipe not found with id " + id));
+    }
+
+    //Delete
+    public void deleteRecipe(String id) {
+        recipeRepository.findById(id).ifPresent(recipe -> {
+            // 1. Delete the physical file if it exists
+            if (recipe.getImageUrl() != null) {
+                try {
+                    // Convert "/uploads/name.jpg" to a local path
+                    Path filePath = Paths.get(recipe.getImageUrl().substring(1));
+                    Files.deleteIfExists(filePath);
+                }catch (IOException e) {
+                    System.out.println("Failed to delete image file: " + e.getMessage());
+                }
+            }
+            // 2. Delete the record from MongoDB
+            recipeRepository.deleteById(id);
+        });
+    }
 }

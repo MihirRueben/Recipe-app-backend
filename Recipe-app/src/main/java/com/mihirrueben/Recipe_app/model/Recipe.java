@@ -1,5 +1,6 @@
 package com.mihirrueben.Recipe_app.model;
 
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
@@ -19,8 +20,10 @@ public class Recipe {
 
     // For Bonus Features
     private String category; // e.g., Vegan, Dessert
+
     private String imageUrl; // Path to the uploaded photo
 
     // Links this recipe to the specific User who created it
     private String userId;
+
 }
