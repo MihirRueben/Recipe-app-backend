@@ -32,4 +32,22 @@ public class UserService {
         }
         return Optional.empty();
     }
+
+    // retrieve User by ID
+    public User getUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+    // Fixes 'Cannot resolve method updateUser' (Note: lowercase 'u' to match Java standards)
+    public User updateUser(String id, User userDetails) {
+        User user = getUserById(id); // Reuse the method above to find the user
+
+        user.setUsername(userDetails.getUsername());
+        user.setEmail(userDetails.getEmail());
+        user.setBio(userDetails.getBio());
+        user.setProfilePictureUrl(userDetails.getProfilePictureUrl());
+
+        return userRepository.save(user);
+    }
 }
