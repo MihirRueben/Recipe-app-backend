@@ -8,7 +8,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     //custom query to find a user by username for Login
-    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
 
     //checking if email exists during registration
     Boolean existsByEmail(String email);

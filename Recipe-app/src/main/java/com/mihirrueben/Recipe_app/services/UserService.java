@@ -20,19 +20,21 @@ public class UserService {
 
 
     public User registerUser(User user) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already in use!");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public Optional<User> loginUser(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public Optional<User> loginUser(String email, String rawPassword) {
+        Optional<User> user = userRepository.findByEmail(email);
 
-
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-            return user;
+        if (user.isPresent ()) {
+            if(passwordEncoder.matches(rawPassword, user.get().getPassword())) {
+                return user;
+            }
         }
         return Optional.empty();
     }

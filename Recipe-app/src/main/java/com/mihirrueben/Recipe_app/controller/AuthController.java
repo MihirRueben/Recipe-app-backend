@@ -32,7 +32,9 @@ public class AuthController {
     // LOGIN
     @PostMapping("/login")
         public ResponseEntity<?> login(@RequestBody User loginRequest) {
-            Optional<User> user = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
+
+            System.out.println("Login Attempt for email: " + loginRequest.getEmail());
+            Optional<User> user = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
             if (user.isPresent()) {
                 return ResponseEntity.ok(user.get());
