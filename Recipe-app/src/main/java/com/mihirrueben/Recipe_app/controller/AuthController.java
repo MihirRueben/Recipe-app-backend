@@ -1,5 +1,6 @@
 package com.mihirrueben.Recipe_app.controller;
 
+import com.mihirrueben.Recipe_app.config.JwtUtil;
 import com.mihirrueben.Recipe_app.model.User;
 import com.mihirrueben.Recipe_app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +20,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     //REGISTER
     @PostMapping("/register")
@@ -31,16 +37,18 @@ public class AuthController {
 
     // LOGIN
     @PostMapping("/login")
-        public ResponseEntity<?> login(@RequestBody User loginRequest) {
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        Optional<User> user = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
-            System.out.println("Login Attempt for email: " + loginRequest.getEmail());
-            Optional<User> user = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
-
-            if (user.isPresent()) {
-                return ResponseEntity.ok(user.get());
-            } else {
-                return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-            }
+        if (user.isPresent()) {
+            String token = jwtUtil.generateToken(user.get().getEmail());
+            // You can return the user AND the token together
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", user.get());
+            response.put("token", token);
+            return ResponseEntity.ok(response);
         }
+        return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.mihirrueben.Recipe_app.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,6 +46,7 @@ public class SecurityConfig {
 
                         // Allow anyone to register or login
                         .requestMatchers("/api/auth/**").permitAll()
+                        // Allow anyone to upload image (temporary)
                         .requestMatchers("/api/images/**").permitAll()
 
                         // Require authentication for modifying data (POST, PUT, DELETE)
@@ -52,6 +57,8 @@ public class SecurityConfig {
                         // Any other request (like image uploads) must be authenticated
                         .anyRequest().authenticated()
                 );
+
+        http.addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
