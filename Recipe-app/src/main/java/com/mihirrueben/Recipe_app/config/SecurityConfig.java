@@ -42,6 +42,7 @@ public class SecurityConfig {
 
                         // Allow anyone to register or login
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/images/**").permitAll()
 
                         // Require authentication for modifying data (POST, PUT, DELETE)
                         .requestMatchers(HttpMethod.POST, "/api/recipes/**").authenticated()
@@ -60,7 +61,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow your frontend origins (Commonly 3000 for React, 5173 for Vite)
+        // Allow frontend origins (Commonly 3000 for React, 5173 for Vite)
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
 
         // Allowed HTTP methods
