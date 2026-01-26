@@ -15,7 +15,7 @@ public class ImageUploadController {
     private static final String UPLOAD_DIR = "uploads/";
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) {
         try {
             // 1. Ensure the directory exists
             Path uploadPath = Paths.get(UPLOAD_DIR);
