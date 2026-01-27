@@ -65,5 +65,10 @@ public class RecipeController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Recipe>> getRecipesByUser(@PathVariable String userId) {
+        List<Recipe> recipes = recipeService.getRecipesByUserId(userId);
+        return ResponseEntity.ok(recipes);
+    }
 }
 

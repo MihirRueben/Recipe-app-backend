@@ -16,4 +16,6 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
 
     //Filter recipes by category
     List<Recipe> findByCategory(String category);
+
+
 }
