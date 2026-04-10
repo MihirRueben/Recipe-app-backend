@@ -11,7 +11,8 @@ import java.nio.file.*;
 @CrossOrigin(origins = "*")
 public class ImageUploadController {
 
-    // This creates a folder named 'uploads' in your project root
+
+
     private static final String UPLOAD_DIR = "uploads/";
 
     @PostMapping("/upload")
@@ -37,4 +38,6 @@ public class ImageUploadController {
             return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
         }
     }
+
+
 }
